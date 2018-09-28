@@ -4,6 +4,9 @@ parts:
     intro: In this part we will Setup Jenkins, and setup an automated pipeline to build, push and deploy our custom appliction.
     steps:
 
+      - cap: Deploy the ClusterRoleBinding located in manifests/rbac.yaml
+        com: kubectl apply -f manifests/rbac.yaml
+
       - cap: Install Jenkins, which we’ll use to create our automated CI/CD pipeline. It will take the pod a minute or two to roll out.
         com: kubectl apply -f manifests/jenkins.yml; kubectl rollout status deployment/jenkins
 
@@ -14,25 +17,25 @@ parts:
         com: kubectl exec -it `kubectl get pods --selector=app=jenkins --output=jsonpath={.items..metadata.name}` cat /root/.jenkins/secrets/initialAdminPassword
 
       - cap: Switch back to the Jenkins UI. Paste the Jenkins admin password in the box and click Continue. Click Install suggested plugins and wait for the process to complete.
-        com: echo '' 
+        com: echo ''
 
       - cap: Create an admin user and credentials, and click Save and Finish. (Make sure to remember these credentials as you will need them for repeated logins.) Click Start using Jenkins.
         com: echo ''
 
-      - cap: We now want to create a new pipeline for use with our Hello-Kenzan app. On the left, click New Item. Enter the item name as "Hello-Kenzan Pipeline", select Pipeline, and click OK.
+      - cap: We now want to create a new pipeline for use with our Hello-Wizzie app. On the left, click New Item. Enter the item name as "Hello-Wizzie Pipeline", select Pipeline, and click OK.
         com: echo ''
 
-      - cap: Under the Pipeline section at the bottom, change the Definition to be "Pipeline script from SCM". 
+      - cap: Under the Pipeline section at the bottom, change the Definition to be "Pipeline script from SCM".
         com: echo ''
 
-      - cap: Change the SCM to Git. 
+      - cap: Change the SCM to Git.
         com: echo ''
 
-      - cap: Change the Repository URL to be the URL of your forked Git repository, such as https://github.com/[GIT USERNAME]/kubernetes-ci-cd. Click Save. On the left, click Build Now to run the new pipeline. 
+      - cap: Change the Repository URL to be the URL of your forked Git repository, such as https://github.com/[GIT USERNAME]/kubernetes-ci-cd. Click Save. On the left, click Build Now to run the new pipeline.
         com: echo ''
 
-      - cap: Now view the Hello-Kenzan application.
-        com: minikube service hello-kenzan
+      - cap: Now view the Hello-Wizzie application.
+        com: minikube service hello-wizzie
 
       - cap: Push a change to your fork. Run job again. View the changes.
-        com: minikube service hello-kenzan
+        com: minikube service hello-wizzie

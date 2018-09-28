@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-wizzie
+  labels:
+    app: hello-wizzie
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: hello-wizzie
+    tier: hello-wizzie
+  type: NodePort
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: hello-wizzie
+  labels:
+    app: hello-wizzie
+spec:
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: hello-wizzie
+        tier: hello-wizzie
+    spec:
+      containers:
+      - image: 127.0.0.1:30400/hello-wizzie:latest
+        name: hello-wizzie
+        ports:
+        - containerPort: 80
+          name: hello-wizzie

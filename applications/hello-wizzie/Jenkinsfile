@@ -8,13 +8,13 @@ node {
 
     tag = readFile('commit-id').replace("\n", "").replace("\r", "")
     appName = "hello-wizzie"
-    registryHost = "127.0.0.1:30400/"
+    registryHost = "127.0.0.1:30912/"
     imageName = "${registryHost}${appName}:${tag}"
     env.BUILDIMG=imageName
 
     stage "Build"
 
-        sh "docker build -t ${imageName} -f applications/hello-wizzie/Dockerfile applications/hello-wizzie"
+        sh "docker build -t ${imageName} part1/hello-wizzie"
 
     stage "Push"
 
@@ -22,6 +22,5 @@ node {
 
     stage "Deploy"
 
-        sh "sed 's#127.0.0.1:30400/hello-wizzie:latest#'$BUILDIMG'#' applications/hello-wizzie/k8s/deployment.yaml | kubectl apply -f -"
-        sh "kubectl rollout status deployment/hello-wizzie"
+        sh "sed 's#__IMAGE__#'$BUILDIMG'#' part1/hello-wizzie/k8s/deployment.yaml | kubectl apply -f -"
 }

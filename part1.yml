@@ -5,7 +5,7 @@ parts:
     steps:
 
       - cap: Start up the Kubernetes cluster with Minikube, giving it some extra resources.
-        com: minikube start --memory 8000 --cpus 2 --kubernetes-version v1.6.0
+        com: minikube start --memory 8000 --cpus 2
 
       - cap: Enable the Minikube add-ons Heapster and Ingress.
         com: minikube addons enable heapster; minikube addons enable ingress
@@ -31,23 +31,23 @@ parts:
       - cap: View the registry user interface in a web browser.
         com: minikube service registry-ui
 
-      - cap: Let’s make a change to an HTML file in the cloned project. Open the /applications/hello-kenzan/index.html file in your favorite text editor (for example, you can use nano by running the command 'nano applications/hello-kenzan/index.html' in a separate terminal). Change some text inside one of the <p> tags. For example, change “Hello from Kenzan!” to “Hello from Me!”. Save the file. 
+      - cap: Let’s make a change to an HTML file in the cloned project. Open the /applications/hello-wizzie/index.html file in your favorite text editor (for example, you can use nano by running the command 'nano applications/hello-wizzie/index.html' in a separate terminal). Change some text inside one of the <p> tags. For example, change “Hello from Wizzie!” to “Hello from Me!”. Save the file.
         com: echo ''
 
       - cap: Now let’s build an image, giving it a special name that points to our local cluster registry.
-        com: docker build -t 127.0.0.1:30400/hello-kenzan:latest -f applications/hello-kenzan/Dockerfile applications/hello-kenzan
+        com: docker build -t 127.0.0.1:30400/hello-wizzie:latest -f applications/hello-wizzie/Dockerfile applications/hello-wizzie
 
       - cap: We’ve built the image, but before we can push it to the registry, we need to set up a temporary proxy. By default the Docker client can only push to HTTP (not HTTPS) via localhost. To work around this, we’ll set up a container that listens on 127.0.0.1:30400 and forwards to our cluster.
         com: docker stop socat-registry; docker rm socat-registry; docker run -d -e "REGIP=`minikube ip`" --name socat-registry -p 30400:5000 chadmoon/socat:latest bash -c "socat TCP4-LISTEN:5000,fork,reuseaddr TCP4:`minikube ip`:30400"
 
       - cap: With our proxy container up and running, we can now push our image to the local repository.
-        com: docker push 127.0.0.1:30400/hello-kenzan:latest
+        com: docker push 127.0.0.1:30400/hello-wizzie:latest
 
       - cap: The proxy’s work is done, so you can go ahead and stop it.
         com: docker stop socat-registry;
 
-      - cap: With the image in our cluster registry, the last thing to do is apply the manifest to create and deploy the hello-kenzan pod based on the image.
-        com: kubectl apply -f applications/hello-kenzan/k8s/deployment.yaml
+      - cap: With the image in our cluster registry, the last thing to do is apply the manifest to create and deploy the hello-wizzie pod based on the image.
+        com: kubectl apply -f applications/hello-wizzie/k8s/deployment.yaml
 
       - cap: Launch a web browser and view the service.
-        com: minikube service hello-kenzan
+        com: minikube service hello-wizzie

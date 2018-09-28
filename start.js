@@ -32,7 +32,7 @@ inquirer.prompt(prompts).ui.process.subscribe(
 prompts.onNext({
     type: 'confirm',
     name: ":",
-    message: "Welcome to the Linux.com interactive Kubernetes tutorial by Kenzan. Press enter to begin\n",
+    message: "Welcome to the Wizzie interactive Kubernetes & CI/CD tutorial. Press enter to begin\n",
     default: true
 });
 
