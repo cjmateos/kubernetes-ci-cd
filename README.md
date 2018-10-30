@@ -38,83 +38,77 @@ Enable the Minikube add-ons Heapster and Ingress.
 
 #### Step3
 
-Wait 20 seconds, and then view the Minikube Dashboard, a web UI for managing deployments.
-
-`sleep 20; minikube service kubernetes-dashboard --namespace kube-system`
-
-#### Step4
-
 Deploy the public nginx image from DockerHub into a pod. Nginx is an open source web server that will automatically download from Docker Hub if it’s not available locally.
 
 `kubectl run nginx --image nginx --port 80`
 
-#### Step5
+#### Step4
 
 Create a service for deployment. This will expose the nginx pod so you can access it with a web browser.
 
 `kubectl expose deployment nginx --type NodePort --port 80`
 
-#### Step6
+#### Step5
 
 Launch a web browser to test the service. The nginx welcome page displays, which means the service is up and running.
 
 `minikube service nginx`
 
-#### Step7
+#### Step6
 
 Set up the cluster registry by applying a .yml manifest file.
 
 `kubectl apply -f manifests/registry.yml`
 
-#### Step8
+#### Step7
 
 Wait for the registry to finish deploying. Note that this may take several minutes.
 
 `kubectl rollout status deployments/registry`
 
-#### Step9
+#### Step8
 
 View the registry user interface in a web browser.
 
 `minikube service registry-ui`
 
-#### Step10
+#### Step9
 
 Let’s make a change to an HTML file in the cloned project. Open the /applications/hello-wizzie/index.html file in your favorite text editor (for example, you can use nano by running the command 'nano applications/hello-wizzie/index.html' in a separate terminal). Change some text inside one of the <p> tags. For example, change “Hello from Wizzie!” to “Hello from Me!”. Save the file.
 
 `nano applications/hello-wizzie/index.html`
 
-#### Step11
+#### Step10
 
 Now let’s build an image, giving it a special name that points to our local cluster registry.
 
 `docker build -t 127.0.0.1:30400/hello-wizzie:latest -f applications/hello-wizzie/Dockerfile applications/hello-wizzie`
 
-#### Step12
+#### Step11
 
 We’ve built the image, but before we can push it to the registry, we need to set up a temporary proxy. By default the Docker client can only push to HTTP (not HTTPS) via localhost. To work around this, we’ll set up a container that listens on 127.0.0.1:30400 and forwards to our cluster.
 
 `docker stop socat-registry; docker rm socat-registry; docker run -d -e "REGIP=`minikube ip`" --name socat-registry -p 30400:5000 chadmoon/socat:latest bash -c "socat TCP4-LISTEN:5000,fork,reuseaddr TCP4:`minikube ip`:30400"`
 
-#### Step13
+#### Step12
 
 With our proxy container up and running, we can now push our image to the local repository.
 
 `docker push 127.0.0.1:30400/hello-wizzie:latest`
 
-#### Step14
+#### Step13
 
 The proxy’s work is done, so you can go ahead and stop it.
 
 `docker stop socat-registry;`
 
-#### Step15
+#### Step14
 
 With the image in our cluster registry, the last thing to do is apply the manifest to create and deploy the hello-wizzie pod based on the image.
 
 `kubectl apply -f applications/hello-wizzie/k8s/deployment.yaml`
 
-#### Step16
+#### Step15
 
 Launch a web browser and view the service.
 
