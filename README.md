@@ -172,17 +172,29 @@ Change the SCM to Git.
 
 #### Step10
 
-Change the Repository URL to be the URL of your forked Git repository, such as https://github.com/[GIT USERNAME]/kubernetes-ci-cd. Click Save. On the left, click Build Now to run the new pipeline.
+Change the Repository URL to be the URL of your forked Git repository, such as https://github.com/[GIT USERNAME]/kubernetes-ci-cd.
 
 `echo ''`
 
 #### Step11
 
+Change the branch to wizzie. Click Save.
+
+`echo ''`
+
+#### Step12
+
+On the left, click Build Now to run the new pipeline.
+
+`echo ''`
+
+#### Step13
+
 Now view the Hello-Wizzie application.
 
 `minikube service hello-wizzie`
 
-#### Step12
+#### Step14
 
 Push a change to your fork. Run job again. View the changes.
 

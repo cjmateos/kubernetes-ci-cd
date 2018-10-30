@@ -31,7 +31,13 @@ parts:
       - cap: Change the SCM to Git.
         com: echo ''
 
-      - cap: Change the Repository URL to be the URL of your forked Git repository, such as https://github.com/[GIT USERNAME]/kubernetes-ci-cd. Click Save. On the left, click Build Now to run the new pipeline.
+      - cap: Change the Repository URL to be the URL of your forked Git repository, such as https://github.com/[GIT USERNAME]/kubernetes-ci-cd.
+        com: echo ''
+
+      - cap: Change the branch to wizzie. Click Save.
+        com: echo ''
+
+      - cap: On the left, click Build Now to run the new pipeline.
         com: echo ''
 
       - cap: Now view the Hello-Wizzie application.
